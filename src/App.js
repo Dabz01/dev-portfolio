@@ -1,126 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import PreviewPortfolio from "./PreviewPortfolio";
+import PortfolioManager from "./PortfolioManager";
+import usePortfolioContent from "./usePortfolioContent";
 import {
   FaGithub,
   FaEnvelope,
   FaPhoneAlt,
   FaWhatsapp,
 } from "react-icons/fa";
-
-/* =========================
-   DATA
-========================= */
-
-const PROJECTS = [
-  {
-    title: "ML-Based SMS & Email Phishing Detection",
-    description:
-      "Supervised ML-based web application that classifies SMS and email text as phishing or legitimate, with a simple interface for live testing.",
-    tech: ["Python", "Pandas", "Scikit-Learn", "Flask"],
-    link: "https://github.com/Dabz01/phishing-detector",
-  },
-  {
-    title: "Cypher Injection Detection Simulation",
-    description:
-      "Network simulation showing cypher injection detection using open-source intrusion detection systems like Suricata and Snort.",
-    tech: ["Suricata", "Snort", "Networking", "Intrusion Detection"],
-    link: "https://github.com/Dabz01/cypher-injection",
-  },
-  {
-    title: "URL Security Scanner Extension",
-    description:
-      "Chrome extension that inspects URLs, checks them against a backend or security API, and warns users before visiting suspicious sites.",
-    tech: ["JavaScript", "Chrome APIs", "REST APIs"],
-    link: "https://github.com/Dabz01/url-scanner",
-  },
-];
-
-const EXPERIENCE = [
-  {
-    role: "Computer Science Teacher",
-    org: "Mountain Top Secondary School, Owerri",
-    period: "2025 – Present",
-    points: [
-      "Teach computer science, programming fundamentals, and digital literacy.",
-      "Help students build confidence with technology through hands-on practice.",
-    ],
-  },
-  {
-    role: "Cybersecurity Tutor",
-    org: "Kunoch Digi, Owerri",
-    period: "2025",
-    points: [
-      "Facilitated cybersecurity training sessions with practical labs.",
-      "Introduced learners to phishing detection, safe browsing, and digital hygiene.",
-    ],
-  },
-  {
-    role: "Cybersecurity Instructor",
-    org: "3MTT (AIFCE, Owerri)",
-    period: "2024",
-    points: [
-      "Trained 50+ learners on core cybersecurity concepts and best practices.",
-      "Led exercises on passwords, system hardening, and threat awareness.",
-    ],
-  },
-];
-
-const SKILLS = [
-  {
-    category: "Cybersecurity & Networking",
-    items: [
-      "Kali Linux",
-      "Snort / Suricata",
-      "Wireshark",
-      "Firewalls",
-      "TCP/IP",
-    ],
-  },
-  {
-    category: "Programming & Web",
-    items: [
-      "Python (APIs, automation)",
-      "JavaScript",
-      "HTML & CSS",
-      "React basics",
-    ],
-  },
-  {
-    category: "Tools & Platforms",
-    items: ["Linux", "Git & GitHub", "CLI", "Basic server management"],
-  },
-  {
-    category: "Soft Skills",
-    items: ["Teaching", "Communication", "Mentoring", "Research & Writing"],
-  },
-];
-
-const CERTIFICATIONS = [
-  "Linux Essentials (2024)",
-  "Endpoint Security (2024)",
-  "Networking Devices & Initial Configuration (2024)",
-  "Ethical Hacking (2024)",
-  "CyberThreat Management (2024)",
-  "CyberOps Associate (2025)",
-];
-
-const TESTIMONIALS = [
-  {
-    text: "He explains cybersecurity in simple, practical language. Every session left me more confident and more aware of digital threats.",
-    name: "3MTT Cybersecurity Trainee",
-    role: "Program Participant",
-  },
-  {
-    text: "Very patient and methodical. He always connects theory with real-world security scenarios.",
-    name: "Kunoch Digi Student",
-    role: "Cybersecurity Track",
-  },
-  {
-    text: "Daberechukwu consistently showed initiative, ownership, and strong problem-solving skills on his project work.",
-    name: "Project Supervisor",
-    role: "FUTO",
-  },
-];
 
 /* =========================
    SMALL UTILS
@@ -132,7 +20,7 @@ function TypingText({ words, speed = 120, pause = 1000 }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const currentWord = words[index % words.length];
+    const currentWord = words.length ? words[index % words.length] : "";
     let timeout;
 
     if (!isDeleting && display.length < currentWord.length) {
@@ -169,11 +57,11 @@ function TypingText({ words, speed = 120, pause = 1000 }) {
    SECTIONS
 ========================= */
 
-function Navbar() {
+function Navbar({ brandName }) {
   return (
     <header className="nav">
       <div className="nav-left">
-        <div className="nav-logo">Daberechukwu<span>.</span></div>
+        <div className="nav-logo">{brandName}<span>.</span></div>
       </div>
       <nav className="nav-right">
         <a href="#hero">Home</a>
@@ -183,32 +71,25 @@ function Navbar() {
         <a href="#skills">Skills</a>
         <a href="#certifications">Certs</a>
         <a href="#contact">Contact</a>
+        <a href="/manage">Manage</a>
       </nav>
     </header>
   );
 }
 
-function Hero() {
+function Hero({ content }) {
   return (
     <section id="hero" className="hero">
       <div className="hero-main">
-        <p className="eyebrow">Cybersecurity • Development • Teaching</p>
+        <p className="eyebrow">{content.hero.eyebrow}</p>
         <h1>
-          Hi, I’m <span className="accent">Daberechukwu Chukwuma</span>
+          Hi, I’m <span className="accent">{content.hero.name}</span>
         </h1>
         <h2>
-          <TypingText
-            words={[
-              "Cybersecurity Specialist",
-              "Developer",
-              "Technology Educator",
-            ]}
-          />
+          <TypingText words={content.hero.titles} />
         </h2>
         <p className="hero-text">
-          I design and explain cybersecurity in a simple, practical way—through
-          real-world projects, training, and tools that help people stay safe
-          online.
+          {content.hero.intro}
         </p>
         <div className="hero-actions">
           <a href="#projects" className="btn btn-primary">
@@ -218,7 +99,7 @@ function Hero() {
             Get in Touch
           </a>
           <a
-            href="/daberechukwu-chukwuma-cv.pdf"
+            href={content.documents.cvUrl}
             className="btn btn-outline"
             download
           >
@@ -226,21 +107,21 @@ function Hero() {
           </a>
         </div>
         <div className="hero-links">
-          <a href="mailto:dab.chukwuma@gmail.com">
+          <a href={`mailto:${content.contact.email}`}>
             <FaEnvelope /> Email
           </a>
-          <a href="tel:+2349060390763">
+          <a href={`tel:${content.contact.phone}`}>
             <FaPhoneAlt /> Call
           </a>
           <a
-            href="https://wa.me/2349060390763"
+            href={`https://wa.me/${content.contact.whatsapp}`}
             target="_blank"
             rel="noreferrer"
           >
             <FaWhatsapp /> WhatsApp
           </a>
           <a
-            href="https://github.com/Dabz01"
+            href={content.contact.github}
             target="_blank"
             rel="noreferrer"
           >
@@ -251,15 +132,14 @@ function Hero() {
       <div className="hero-side">
         <div className="hero-avatar-wrap">
           <div className="hero-ring" />
-          <img src="/profile.jpg" alt="Profile" className="hero-avatar" />
+          <img src={content.documents.profileImage} alt={content.hero.name} className="hero-avatar" />
         </div>
         <div className="hero-summary card">
           <h3>Snapshot</h3>
           <ul>
-            <li>Computer Science Teacher – MTS Owerri</li>
-            <li>Cybersecurity Tutor – Kunoch Digi</li>
-            <li>Cybersecurity Instructor – 3MTT (AIFCE)</li>
-            <li>B.Sc. Cybersecurity – FUTO</li>
+            {content.snapshot.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ul>
         </div>
       </div>
@@ -267,27 +147,18 @@ function Hero() {
   );
 }
 
-function About() {
+function About({ about }) {
   return (
     <section id="about" className="section section-narrow">
       <h2>About</h2>
-      <p>
-        I am a cybersecurity-focused developer and educator based in Owerri,
-        Nigeria. My work sits at the intersection of secure systems, practical
-        training, and real-world problem solving. I enjoy breaking down complex
-        ideas into clear, step-by-step explanations and building tools that
-        defend against threats like phishing and unsafe links.
-      </p>
-      <p>
-        Long-term, I want to contribute to a safer digital ecosystem in Africa
-        by combining hands-on technical skills, teaching, and community-focused
-        security awareness.
-      </p>
+      {about.map((paragraph) => (
+        <p key={paragraph}>{paragraph}</p>
+      ))}
     </section>
   );
 }
 
-function Experience() {
+function Experience({ experience }) {
   return (
     <section id="experience" className="section">
       <div className="section-header">
@@ -295,7 +166,7 @@ function Experience() {
         <p>Roles that have shaped how I think about security and teaching.</p>
       </div>
       <div className="experience-grid">
-        {EXPERIENCE.map((job, idx) => (
+        {experience.map((job, idx) => (
           <article key={idx} className="card">
             <div className="card-header-row">
               <h3>{job.role}</h3>
@@ -314,7 +185,7 @@ function Experience() {
   );
 }
 
-function Projects() {
+function Projects({ projects }) {
   return (
     <section id="projects" className="section">
       <div className="section-header">
@@ -325,7 +196,7 @@ function Projects() {
         </p>
       </div>
       <div className="project-grid">
-        {PROJECTS.map((project, idx) => (
+        {projects.map((project, idx) => (
           <article key={idx} className="card project-card">
             <h3>{project.title}</h3>
             <p className="muted">{project.description}</p>
@@ -351,7 +222,7 @@ function Projects() {
   );
 }
 
-function Skills() {
+function Skills({ skills }) {
   return (
     <section id="skills" className="section">
       <div className="section-header">
@@ -359,7 +230,7 @@ function Skills() {
         <p>Tools and capabilities I use to deliver secure, practical outcomes.</p>
       </div>
       <div className="skills-grid">
-        {SKILLS.map((group, idx) => (
+        {skills.map((group, idx) => (
           <article key={idx} className="card">
             <h3>{group.category}</h3>
             <ul className="simple-list">
@@ -374,12 +245,12 @@ function Skills() {
   );
 }
 
-function Certifications() {
+function Certifications({ certifications }) {
   return (
     <section id="certifications" className="section section-narrow">
       <h2>Certifications</h2>
       <div className="cert-row">
-        {CERTIFICATIONS.map((cert) => (
+        {certifications.map((cert) => (
           <span key={cert} className="cert-chip">
             {cert}
           </span>
@@ -389,7 +260,7 @@ function Certifications() {
   );
 }
 
-function Testimonials() {
+function Testimonials({ testimonials }) {
   return (
     <section className="section">
       <div className="section-header">
@@ -397,7 +268,7 @@ function Testimonials() {
         <p>What learners and supervisors have said about working with me.</p>
       </div>
       <div className="testimonial-grid">
-        {TESTIMONIALS.map((t, idx) => (
+        {testimonials.map((t, idx) => (
           <article key={idx} className="card">
             <p className="quote">“{t.text}”</p>
             <p className="muted">
@@ -410,7 +281,7 @@ function Testimonials() {
   );
 }
 
-function Contact() {
+function Contact({ contact }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert("Thanks for reaching out! I will respond as soon as I can.");
@@ -428,18 +299,18 @@ function Contact() {
           <ul className="contact-list">
             <li>
               <FaEnvelope />{" "}
-              <a href="mailto:dab.chukwuma@gmail.com">
-                dab.chukwuma@gmail.com
+              <a href={`mailto:${contact.email}`}>
+                {contact.email}
               </a>
             </li>
             <li>
               <FaPhoneAlt />{" "}
-              <a href="tel:+2349060390763">+234 906 039 0763</a>
+              <a href={`tel:${contact.phone}`}>{contact.phoneDisplay}</a>
             </li>
             <li>
               <FaWhatsapp />{" "}
               <a
-                href="https://wa.me/2349060390763"
+                href={`https://wa.me/${contact.whatsapp}`}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -449,11 +320,11 @@ function Contact() {
             <li>
               <FaGithub />{" "}
               <a
-                href="https://github.com/Dabz01"
+                href={contact.github}
                 target="_blank"
                 rel="noreferrer"
               >
-                github.com/Dabz01
+                {contact.githubDisplay}
               </a>
             </li>
           </ul>
@@ -489,12 +360,12 @@ function Contact() {
   );
 }
 
-function Footer() {
+function Footer({ hero }) {
   return (
     <footer className="footer">
-      <p>© {new Date().getFullYear()} Daberechukwu Chukwuma</p>
+      <p>© {new Date().getFullYear()} {hero.name}</p>
       <p className="muted">
-        Cybersecurity • Development • Teaching
+        {hero.eyebrow}
       </p>
     </footer>
   );
@@ -505,25 +376,41 @@ function Footer() {
 ========================= */
 
 function App() {
+  const portfolio = usePortfolioContent();
+  const isPreviewRoute =
+    window.location.pathname === "/preview" ||
+    window.location.search.includes("preview=true");
+  const isManagerRoute =
+    window.location.pathname === "/manage" ||
+    window.location.search.includes("manage=true");
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [isPreviewRoute, isManagerRoute]);
+
+  if (isPreviewRoute) {
+    return <PreviewPortfolio />;
+  }
+
+  if (isManagerRoute) {
+    return <PortfolioManager />;
+  }
 
   return (
     <div className="app">
       <div className="bg-gradient" />
-      <Navbar />
+      <Navbar brandName={portfolio.hero.brandName} />
       <main>
-        <Hero />
-        <About />
-        <Experience />
-        <Projects />
-        <Skills />
-        <Certifications />
-        <Testimonials />
-        <Contact />
+        <Hero content={portfolio} />
+        <About about={portfolio.about} />
+        <Experience experience={portfolio.experience} />
+        <Projects projects={portfolio.projects} />
+        <Skills skills={portfolio.skills} />
+        <Certifications certifications={portfolio.certifications} />
+        <Testimonials testimonials={portfolio.testimonials} />
+        <Contact contact={portfolio.contact} />
       </main>
-      <Footer />
+      <Footer hero={portfolio.hero} />
     </div>
   );
 }

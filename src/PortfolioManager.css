@@ -1,0 +1,222 @@
+.manager-app {
+  --manager-bg: #05060a;
+  --manager-panel: #0d1016;
+  --manager-panel-soft: #141823;
+  --manager-border: rgba(148, 163, 184, 0.28);
+  --manager-text: #e5e7eb;
+  --manager-muted: #9ca3af;
+  --manager-accent: #22c55e;
+  --manager-danger: #f87171;
+  background:
+    radial-gradient(circle at top left, rgba(34, 197, 94, 0.22), transparent 38%),
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.18), transparent 38%),
+    var(--manager-bg);
+  color: var(--manager-text);
+  min-height: 100vh;
+}
+
+.manager-app * {
+  box-sizing: border-box;
+}
+
+.manager-hero,
+.manager-layout {
+  margin: 0 auto;
+  max-width: 1180px;
+  padding-inline: 24px;
+}
+
+.manager-hero {
+  padding-top: 48px;
+  padding-bottom: 26px;
+}
+
+.manager-kicker {
+  color: var(--manager-accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+
+.manager-hero h1 {
+  font-size: clamp(2.2rem, 7vw, 4.8rem);
+  letter-spacing: -0.07em;
+  line-height: 0.96;
+  margin: 0;
+  max-width: 860px;
+}
+
+.manager-hero p {
+  color: var(--manager-muted);
+  line-height: 1.7;
+  max-width: 760px;
+}
+
+.manager-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.manager-button,
+.manager-card-header button {
+  align-items: center;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--manager-border);
+  border-radius: 999px;
+  color: var(--manager-text);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 16px;
+  text-decoration: none;
+}
+
+.manager-button-primary {
+  background: linear-gradient(135deg, var(--manager-accent), #16a34a);
+  color: #02140c;
+  font-weight: 800;
+}
+
+.manager-button-danger,
+.manager-card-header button {
+  border-color: rgba(248, 113, 113, 0.4);
+  color: #fecaca;
+}
+
+.manager-status {
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  border-radius: 14px;
+  display: inline-block;
+  padding: 9px 12px;
+}
+
+.manager-layout {
+  display: grid;
+  gap: 22px;
+  padding-bottom: 72px;
+}
+
+.manager-section,
+.manager-card {
+  background: rgba(13, 16, 22, 0.88);
+  border: 1px solid var(--manager-border);
+  border-radius: 22px;
+  box-shadow: 0 20px 52px rgba(0, 0, 0, 0.28);
+}
+
+.manager-section {
+  padding: 22px;
+}
+
+.manager-section-heading {
+  margin-bottom: 18px;
+}
+
+.manager-section-heading h2,
+.manager-card h3 {
+  margin: 0;
+}
+
+.manager-section-heading p {
+  color: var(--manager-muted);
+  line-height: 1.6;
+  margin: 6px 0 0;
+}
+
+.manager-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.two-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.three-columns {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.manager-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.manager-card {
+  background: var(--manager-panel-soft);
+  padding: 16px;
+}
+
+.manager-card-header {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.manager-field {
+  color: var(--manager-muted);
+  display: grid;
+  font-size: 0.9rem;
+  gap: 7px;
+}
+
+.manager-field span {
+  color: var(--manager-text);
+  font-weight: 700;
+}
+
+.manager-field small {
+  color: var(--manager-muted);
+}
+
+.manager-field input,
+.manager-field textarea {
+  background: #020617;
+  border: 1px solid rgba(51, 65, 85, 0.9);
+  border-radius: 12px;
+  color: var(--manager-text);
+  font: inherit;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.manager-field textarea {
+  resize: vertical;
+}
+
+.manager-field input:focus,
+.manager-field textarea:focus,
+.manager-button:focus-visible,
+.manager-card-header button:focus-visible {
+  outline: 3px solid rgba(34, 197, 94, 0.28);
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .manager-hero,
+  .manager-layout {
+    padding-inline: 16px;
+  }
+
+  .two-columns,
+  .three-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .manager-section {
+    padding: 16px;
+  }
+
+  .manager-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
