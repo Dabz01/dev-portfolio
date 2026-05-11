@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import PreviewPortfolio from "./PreviewPortfolio";
 import {
   FaGithub,
   FaEnvelope,
@@ -505,9 +506,17 @@ function Footer() {
 ========================= */
 
 function App() {
+  const isPreviewRoute =
+    window.location.pathname === "/preview" ||
+    window.location.search.includes("preview=true");
+
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [isPreviewRoute]);
+
+  if (isPreviewRoute) {
+    return <PreviewPortfolio />;
+  }
 
   return (
     <div className="app">
